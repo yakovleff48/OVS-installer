@@ -6,7 +6,7 @@ chmod 755 /bin/ovs
 cp scripts/ovpn_connect.sh /tmp/  
 cp scripts/ovpn_disconnect.sh /tmp/
 cp scripts/ovpn-mon/openvpn-monitor.conf /tmp
-cp scripts/ovpn-mon/GeoLite2-City.mmdb /tmp
+#cp scripts/ovpn-mon/GeoLite2-City.mmdb /tmp
 
 echo "Все предватительные шаги пройдены, теперь можно переходить к установке и конфигурированию"
 echo "OpenVPN сервера и выпуску клиентских сертификатов"

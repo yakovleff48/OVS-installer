@@ -869,7 +869,8 @@ cd /srv/openvpn-monitor
 gunicorn openvpn-monitor -b 0.0.0.0:8888 --name openvpn-monitor --daemon" > /srv/openvpn-monitor/start-ovpn-mon.sh
 
 #Create file for logging connect-disconnect clients
-echo "#File for logging connect-disconnect clients" > /var/log/openvpn/remote.connect
+echo "#File for logging connect-disconnect clients
+#Пользователь   |   Начало_сессии   |   Внутренний_IP_VPN   |   Внешний_IP_пользователя | Продолжительность_сессии | Трафик(up/down) |" > /var/log/openvpn/remote.connect
 chmod 777 /var/log/openvpn/remote.connect
 
 # Script to stop openvpn-mon daemon

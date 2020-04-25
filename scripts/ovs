@@ -884,7 +884,7 @@ chmod +x /srv/openvpn-monitor/stop-ovpn-mon.sh
 mv /tmp/ovpn_connect.sh /etc/openvpn/scripts/ovpn_connect.sh
 mv /tmp/ovpn_disconnect.sh /etc/openvpn/scripts/ovpn_disconnect.sh
 mv /tmp/openvpn-monitor.conf /srv/openvpn-monitor/openvpn-monitor.conf
-mv /tmp/GeoLite2-City.mmdb /var/lib/GeoIP/GeoLite2-City.mmdb
+#mv /tmp/GeoLite2-City.mmdb /var/lib/GeoIP/GeoLite2-City.mmdb
 chmod 755 /etc/openvpn/scripts/ovpn_connect.sh
 chmod 755 /etc/openvpn/scripts/ovpn_disconnect.sh
 

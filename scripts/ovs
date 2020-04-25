@@ -869,8 +869,8 @@ cd /srv/openvpn-monitor
 gunicorn openvpn-monitor -b 0.0.0.0:8888 --name openvpn-monitor --daemon" > /srv/openvpn-monitor/start-ovpn-mon.sh
 
 #Create file for logging connect-disconnect clients
-echo "#File for logging connect-disconnect clients
-#Пользователь   |   Начало_сессии   |   Внутренний_IP_VPN   |   Внешний_IP_пользователя | Продолжительность_сессии | Трафик(up/down) |" > /var/log/openvpn/remote.connect
+#echo "#File for logging connect-disconnect clients" 
+> /var/log/openvpn/remote.connect
 chmod 777 /var/log/openvpn/remote.connect
 
 # Script to stop openvpn-mon daemon
@@ -885,7 +885,7 @@ chmod +x /srv/openvpn-monitor/stop-ovpn-mon.sh
 mv /tmp/ovpn_connect.sh /etc/openvpn/scripts/ovpn_connect.sh
 mv /tmp/ovpn_disconnect.sh /etc/openvpn/scripts/ovpn_disconnect.sh
 mv /tmp/openvpn-monitor.conf /srv/openvpn-monitor/openvpn-monitor.conf
-#mv /tmp/GeoLite2-City.mmdb /var/lib/GeoIP/GeoLite2-City.mmdb
+mv /tmp/GeoLite2-City.mmdb /var/lib/GeoIP/GeoLite2-City.mmdb
 chmod 755 /etc/openvpn/scripts/ovpn_connect.sh
 chmod 755 /etc/openvpn/scripts/ovpn_disconnect.sh
 
@@ -1181,6 +1181,14 @@ echo ""
 	echo "Клиент $CLIENT разблокирован."
 }
 
+function LogReports () {
+clear
+awk 'BEGIN { FS=" "; print "Пользователь\t\tНачало_сессии\t\tВнутренний_IP_VPN\t\tВнешний_IP_пользователя\t\tПродолжительность_сессии\t\tТрафик(up/down)\n--------------"; }
+{printf "%-10s %27s %20s %40s %25s %38s\n",$1,$2,$3,$4,$5,$6 }
+END { print "--------------\nFile Complete" }' /var/log/openvpn/remote.connect
+#	nano "/var/log/openvpn/remote.connect"	
+}
+
 function revokeClient () {
 	NUMBEROFCLIENTS=$(tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep -c "^V")
 	if [[ "$NUMBEROFCLIENTS" == '0' ]]; then
@@ -1290,11 +1298,12 @@ function manageMenu () {
     echo "   3) Сбросить сессию подключенного клиента"
     echo "   4) Заблокировать клиента"
     echo "   5) Разблокировать клиента"
-	echo "   6) Отозвать сертификат существующего клиента"
-	echo "   7) Удалить OpenVPN сервер"
-	echo "   8) Выйти"
-	until [[ "$MENU_OPTION" =~ ^[1-8]$ ]]; do
-		read -rp "Сделайте выбор [1-8]: " MENU_OPTION
+    echo "   6) Посмотреть журнал активности клиентов"
+	echo "   7) Отозвать сертификат существующего клиента"
+	echo "   8) Удалить OpenVPN сервер"
+	echo "   9) Выйти"
+	until [[ "$MENU_OPTION" =~ ^[1-9]$ ]]; do
+		read -rp "Сделайте выбор [1-9]: " MENU_OPTION
 	done
 
 	case $MENU_OPTION in
@@ -1314,12 +1323,15 @@ function manageMenu () {
 			UnblockClient
 		;;
 		6)
+        	LogReports
+		;;
+        7)
         	revokeClient
 		;;
-		7)
+		8)
 			removeOpenVPN
 		;;
-		8)
+		9)
 			exit 0
 		;;
 	esac

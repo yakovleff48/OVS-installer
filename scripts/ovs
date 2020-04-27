@@ -517,7 +517,7 @@ function installOpenVPN () {
  #   password=1234Abcd
 if [ $(id -u) -eq 0 ]; then
 #       read -p "Enter username : " username
-        read -s -p "Задайте пароль для системного пользователя ovuser : " password
+        read -s -p "Задайте пароль для системного пользователя ovuser(символы при вводе не отображаются) : " password
         egrep "^$username" /etc/passwd >/dev/null
         if [ $? -eq 0 ]; then
                 echo "$username exists!"

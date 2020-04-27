@@ -512,11 +512,12 @@ function installOpenVPN () {
 	fi
 
 	#Add new user, for run scripts
+	echo "Для запуска пользовательски скриптов будет создана сиcтемная учетная запись ovuser"
     username=ovuser
-    password=1234Abcd
+ #   password=1234Abcd
 if [ $(id -u) -eq 0 ]; then
 #       read -p "Enter username : " username
-#       read -s -p "Enter password : " password
+        read -s -p "Задайте пароль для системного пользователя ovuser : " password
         egrep "^$username" /etc/passwd >/dev/null
         if [ $? -eq 0 ]; then
                 echo "$username exists!"

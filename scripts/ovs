@@ -1176,10 +1176,10 @@ function UnblockClient () {
 
 	CLIENT=$(tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep "^V" | cut -d '=' -f 2 | sed -n "$CLIENTNUMBER"p)
 #разблокировать клиента
-cp /etc/openvpn/ccd/$CLIENT"_disabled" /etc/openvpn/ccd/$CLIENT
-rm /etc/openvpn/ccd/$CLIENT"_disabled"
+mv /etc/openvpn/ccd/$CLIENT"_disabled" /etc/openvpn/ccd/$CLIENT
+#rm /etc/openvpn/ccd/$CLIENT"_disabled"
 echo ""
-	echo "Клиент $CLIENT разблокирован."
+	echo "Клиент $CLIENT разблокирован. Не забудь актуализировать права доступа "
 }
 
 function LogReports () {

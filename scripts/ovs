@@ -1131,53 +1131,59 @@ echo ""
 }
 
 function BlockClient () {
-	NUMBEROFCLIENTS=$(tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep -c "^V")
-	if [[ "$NUMBEROFCLIENTS" == '0' ]]; then
-		echo ""
-		echo "У Вас нет доступных клиентов!"
-		exit 1
-	fi
+        NUMBEROFCLIENTS=$(tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep -c "^V")
+        if [[ "$NUMBEROFCLIENTS" == '0' ]]; then
+                echo ""
+                echo "У Вас нет доступных клиентов!"
+                exit 1
+        fi
 
-	echo ""
-	echo "Выберите клиента которого Вы хотите заблокировать"
-	tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep "^V" | cut -d '=' -f 2 | nl -s ') '
-	if [[ "$NUMBEROFCLIENTS" == '1' ]]; then
-		read -rp "Выберите одного клиента [1]: " CLIENTNUMBER
-	else
-		read -rp "Выберите одного клиента [1-$NUMBEROFCLIENTS]: " CLIENTNUMBER
-	fi
+        echo ""
+        echo "Выберите клиента которого Вы хотите заблокировать"
+        tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep "^V" | cut -d '=' -f 2 | nl -s ') '
+        if [[ "$NUMBEROFCLIENTS" == '1' ]]; then
+                read -rp "Выберите одного клиента [1]: " CLIENTNUMBER
+        else
+                read -rp "Выберите одного клиента [1-$NUMBEROFCLIENTS]: " CLIENTNUMBER
+        fi
 
-	CLIENT=$(tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep "^V" | cut -d '=' -f 2 | sed -n "$CLIENTNUMBER"p)
+        CLIENT=$(tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep "^V" | cut -d '=' -f 2 | sed -n "$CLIENTNUMBER"p)
+
+#внести заблокированного клиента в список
+echo "$CLIENT" >>/etc/openvpn/ccd/list_disabled_clients
+
 #заблокировать пользователя
 cp /etc/openvpn/ccd/$CLIENT /etc/openvpn/ccd/$CLIENT"_disabled"
 echo 'disable' >/etc/openvpn/ccd/$CLIENT
 #сбросить сессию клиента (если он подключен)
 { echo "kill $CLIENT"; sleep 1; } | telnet localhost 5555
 echo ""
-	echo "Клиент $CLIENT заблокирован."
+        echo "Клиент $CLIENT заблокирован."
 }
 
+
 function UnblockClient () {
-	NUMBEROFCLIENTS=$(tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep -c "^V")
-	if [[ "$NUMBEROFCLIENTS" == '0' ]]; then
-		echo ""
-		echo "У Вас нет доступных клиентов!"
-		exit 1
-	fi
+        NUMBEROFCLIENTS=$(tail -n +1 /etc/openvpn/ccd/list_disabled_clients | grep -c "^")
+        if [[ "$NUMBEROFCLIENTS" == '0' ]]; then
+                echo ""
+                echo "У Вас нет заблокированных клиентов!"
+                exit 1
+        fi
 
-	echo ""
-	echo "Выберите клиента которого Вы хотите разблокировать"
-	tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep "^V" | cut -d '=' -f 2 | nl -s ') '
-	if [[ "$NUMBEROFCLIENTS" == '1' ]]; then
-		read -rp "Выберите одного клиента [1]: " CLIENTNUMBER
-	else
-		read -rp "Выберите одного клиента [1-$NUMBEROFCLIENTS]: " CLIENTNUMBER
-	fi
-
-	CLIENT=$(tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep "^V" | cut -d '=' -f 2 | sed -n "$CLIENTNUMBER"p)
+        echo ""
+        echo "Выберите клиента которого Вы хотите разблокировать"
+        tail -n +1 /etc/openvpn/ccd/list_disabled_clients | nl -s ') '  
+        if [[ "$NUMBEROFCLIENTS" == '1' ]]; then
+                read -rp "Выберите одного клиента [1]: " CLIENTNUMBER
+        else
+                read -rp "Выберите одного клиента [1-$NUMBEROFCLIENTS]: " CLIENTNUMBER
+        fi
+        CLIENT=$(tail -n +1 /etc/openvpn/ccd/list_disabled_clients | sed -n "$CLIENTNUMBER"p)
 #разблокировать клиента
 mv /etc/openvpn/ccd/$CLIENT"_disabled" /etc/openvpn/ccd/$CLIENT
-#rm /etc/openvpn/ccd/$CLIENT"_disabled"
+#удалить разблокированного клиента из списка
+sed -i "$CLIENTNUMBER"d /etc/openvpn/ccd/list_disabled_clients
+
 echo ""
 	echo "Клиент $CLIENT разблокирован. Не забудь актуализировать права доступа "
 }

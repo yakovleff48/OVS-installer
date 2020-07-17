@@ -1148,7 +1148,13 @@ function BlockClient () {
         fi
 
         CLIENT=$(tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep "^V" | cut -d '=' -f 2 | sed -n "$CLIENTNUMBER"p)
-
+#проверить наличие клиента в списке заблокированных
+        CLIENTINLIST=$(grep -w -c $CLIENT /etc/openvpn/ccd/list_disabled_clients)
+        if [[ "$CLIENTINLIST" -ge '1' ]]; then
+                echo ""
+                echo "Клиент $CLIENT уже заблокирован!"
+                exit 1
+        fi
 #внести заблокированного клиента в список
 echo "$CLIENT" >>/etc/openvpn/ccd/list_disabled_clients
 

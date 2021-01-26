@@ -1234,7 +1234,7 @@ function revokeClient () {
 	find /home/ -maxdepth 2 -name "$CLIENT.ovpn" -delete
 	rm -f "/root/$CLIENT.ovpn"
 	sed -i "s|^$CLIENT,.*||" /etc/openvpn/ipp.txt
-
+	sed -i "/$CLIENT/d" /etc/openvpn/ccd/list_disabled_clients
 	echo ""
 	echo "Сертификат клиента $CLIENT отозван."
 }

@@ -24,7 +24,9 @@ apt install unzip
 ### Usage
 First, download zip archive from https://github.com/yakovleff48/OVS-installer, to any place on the server, and
 ```shell
+wget -O OVS-installer-master.zip https://github.com/yakovleff48/OVS-installer/archive/refs/heads/master.zip
 unzip OVS-installer-master.zip
+rm OVS-installer-master.zip
 cd OVS-installer-master/
 chmod +x install.sh
 ./install.sh

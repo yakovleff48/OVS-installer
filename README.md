@@ -54,7 +54,7 @@ navigate to `http://ip_address_OpenVPN_server:8888`
 
 ## License
 
-openvpn-monitor is licensed under the GPLv3, a copy of which can be found in
+OVS-installer is licensed under the GPLv3, a copy of which can be found in
 the COPYING file.
 
 

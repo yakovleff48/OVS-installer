@@ -22,7 +22,7 @@ function checkOS () {
 		source /etc/os-release
 
 		if [[ "$ID" == "debian" || "$ID" == "raspbian" ]]; then
-			if [[ ! $VERSION_ID =~ (8|9|10) ]]; then
+			if [[ ! $VERSION_ID =~ (8|9|10|11) ]]; then
 				echo "⚠️ Ваша версия Debian не поддерживается."
 				echo ""
 				echo "Однако, если вы используете Debian > = 9 или unstable / testing, можете продолжить."
@@ -37,7 +37,7 @@ function checkOS () {
 			fi
 		elif [[ "$ID" == "ubuntu" ]];then
 			OS="ubuntu"
-			if [[ ! $VERSION_ID =~ (16.04|18.04|19.04) ]]; then
+			if [[ ! $VERSION_ID =~ (16.04|18.04|19.04|20.04) ]]; then
 				echo "⚠️ Ваша версия Ubuntu не поддерживается."
 				echo ""
 				echo "Однако, если вы используете Ubuntu > 17 или beta, можете продолжить."

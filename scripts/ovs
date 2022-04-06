@@ -22,14 +22,14 @@ function checkOS () {
 		source /etc/os-release
 
 		if [[ "$ID" == "debian" || "$ID" == "raspbian" ]]; then
-			if [[ ! $VERSION_ID =~ (8|9|10|11) ]]; then
+			if [[ ! $VERSION_ID =~ (8|9|10) ]]; then
 				echo "⚠️ Ваша версия Debian не поддерживается."
 				echo ""
-				echo "Однако, если вы используете Debian > = 9 или unstable / testing, можете продолжить."
-				echo "Имейте в виду, что они не поддерживаются, хотя..."
+				#echo "Однако, если вы используете Debian > = 9 или unstable / testing, можете продолжить."
+				#echo "Имейте в виду, что они не поддерживаются, хотя..."
 				echo ""
-				until [[ $CONTINUE =~ (y|n) ]]; do
-					read -rp "Continue? [y/n]: " -e CONTINUE
+				until [[ $CONTINUE =~ (n|n) ]]; do
+					read -rp "Продолжить? [n/n]: " -e CONTINUE
 				done
 				if [[ "$CONTINUE" == "n" ]]; then
 					exit 1
@@ -43,8 +43,8 @@ function checkOS () {
 				echo "Однако, если вы используете Ubuntu > 17 или beta, можете продолжить."
 				echo "Имейте в виду, что они не поддерживаются, хотя...."
 				echo ""
-				until [[ $CONTINUE =~ (y|n) ]]; do
-					read -rp "Продолжить? [y/n]: " -e CONTINUE
+				until [[ $CONTINUE =~ (n|n) ]]; do
+					read -rp "Продолжить? [n/n]: " -e CONTINUE
 				done
 				if [[ "$CONTINUE" == "n" ]]; then
 					exit 1

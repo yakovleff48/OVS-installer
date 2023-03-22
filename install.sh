@@ -6,10 +6,8 @@ chmod 755 /bin/ovs
 cp scripts/ovpn_connect.sh /tmp/  
 cp scripts/ovpn_disconnect.sh /tmp/
 cp scripts/ovpn-mon/openvpn-monitor.conf /tmp
-#cp scripts/ovpn-mon/GeoLite2-City.mmdb /tmp
-
+apt-get update && apt-get install curl -y
 echo "Все предватительные шаги пройдены, теперь можно переходить к установке и конфигурированию"
 echo "OpenVPN сервера и выпуску клиентских сертификатов"
 read -n1 -r -p "Press any key to continue..."
 /bin/ovs
-
